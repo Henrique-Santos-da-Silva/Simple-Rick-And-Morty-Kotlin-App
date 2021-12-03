@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">RickAndMorty App</string>
+    <string name="fragment_list_home">Home</string>
+    <string name="fragment_detail">Detail Character</string>
 </resources>

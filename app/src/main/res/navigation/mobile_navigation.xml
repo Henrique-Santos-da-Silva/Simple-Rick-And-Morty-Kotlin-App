@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    app:startDestination="@id/nav_list_character"
+    android:id="@+id/mobile_navigation">
+
+    <fragment
+        android:id="@+id/nav_list_character"
+        android:name="com.demo.android.henrique.rickandmotyapp.view.ListCharactersFragment"
+        android:label="@string/fragment_list_home"
+        tools:layout="@layout/fragment_list_characters" >
+        <action
+            android:id="@+id/action_nav_list_character_to_nav_detail_character"
+            app:destination="@id/nav_detail_character" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/nav_detail_character"
+        android:name="com.demo.android.henrique.rickandmotyapp.view.DetailCharacterFragment"
+        android:label="@string/fragment_detail"
+        tools:layout="@layout/fragment_detail_character" />
+</navigation>
