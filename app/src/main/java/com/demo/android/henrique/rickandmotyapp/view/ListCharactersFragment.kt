@@ -42,6 +42,10 @@ class ListCharactersFragment : Fragment() {
                 showCharacters(response.body()!!.results)
             } else {
                showErrorMessage(response.code().toString())
+                activity?.supportFragmentManager
+                    ?.beginTransaction()
+                    ?.remove(this)
+                    ?.commit()
             }
         })
 

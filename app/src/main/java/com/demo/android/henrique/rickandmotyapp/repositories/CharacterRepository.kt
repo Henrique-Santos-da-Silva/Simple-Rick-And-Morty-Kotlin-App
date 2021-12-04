@@ -10,4 +10,8 @@ class CharacterRepository {
     suspend fun findAllCharacters(): Response<CharacterList> {
         return HttpClient.retrofit().findAllCharacters()
     }
+
+    suspend fun findBy(id: Int): Response<Character> {
+        return HttpClient.retrofit().findBy(id)
+    }
 }
