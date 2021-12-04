@@ -1,12 +1,13 @@
 package com.demo.android.henrique.rickandmotyapp.view
 
-import android.annotation.SuppressLint
 import android.content.Context
+import android.opengl.Visibility
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
@@ -17,7 +18,7 @@ import com.demo.android.henrique.rickandmotyapp.repositories.CharacterRepository
 import com.demo.android.henrique.rickandmotyapp.viewmodel.SharedViewModel
 import com.demo.android.henrique.rickandmotyapp.viewmodel.SharedViewModelFactory
 
-class ListCharactersFragment: Fragment() {
+class ListCharactersFragment : Fragment() {
     private var _binding: FragmentListCharactersBinding? = null
     private val binding: FragmentListCharactersBinding? get() = _binding
 
@@ -36,21 +37,29 @@ class ListCharactersFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-
         sharedViewModel.listCharacter.observe(viewLifecycleOwner, Observer { response ->
             if (response.isSuccessful) {
                 showCharacters(response.body()!!.results)
             } else {
-                Log.d("ResultError", response.code().toString())
+               showErrorMessage(response.code().toString())
             }
         })
+
     }
 
-    @SuppressLint("NotifyDataSetChanged")
     private fun showCharacters(response: List<Character>) {
-        val adapter = CharacterAdapter(response)
+        binding?.rvMain?.adapter = CharacterAdapter(response)
         binding?.rvMain?.layoutManager = LinearLayoutManager(requireContext())
-        binding?.rvMain?.adapter
-        adapter.notifyDataSetChanged()
     }
+
+    private fun showErrorMessage(message: String) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+    }
+
+//    private fun showOrHideProgressBar(visibility: Boolean) {
+//        if (visibility)
+//            binding?.progressBar?.visibility = View.VISIBLE
+//        else
+//            binding?.progressBar?.visibility = View.GONE
+//    }
 }

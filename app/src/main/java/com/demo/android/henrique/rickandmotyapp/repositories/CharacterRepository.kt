@@ -7,7 +7,7 @@ import retrofit2.Response
 
 class CharacterRepository {
 
-    suspend fun findAllCharacteres(): Response<CharacterList> {
+    suspend fun findAllCharacters(): Response<CharacterList> {
         return HttpClient.retrofit().findAllCharacters()
     }
 }

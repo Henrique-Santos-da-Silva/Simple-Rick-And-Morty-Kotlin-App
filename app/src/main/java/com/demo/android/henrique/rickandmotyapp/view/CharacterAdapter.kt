@@ -1,5 +1,6 @@
 package com.demo.android.henrique.rickandmotyapp.view
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -27,4 +28,5 @@ class CharacterAdapter(private val characters: List<Character>): RecyclerView.Ad
     }
 
     override fun getItemCount(): Int = characters.size
+
 }
