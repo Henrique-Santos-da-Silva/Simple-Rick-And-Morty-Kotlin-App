@@ -5,7 +5,7 @@ import com.demo.android.henrique.rickandmotyapp.model.Character
 import com.demo.android.henrique.rickandmotyapp.model.CharacterList
 import retrofit2.Response
 
-class CharactererRepository {
+class CharacterRepository {
 
     suspend fun findAllCharacteres(): Response<CharacterList> {
         return HttpClient.retrofit().findAllCharacters()
