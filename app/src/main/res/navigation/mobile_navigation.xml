@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_nav_list_character_to_nav_detail_character"
             app:destination="@id/nav_detail_character" />
+        <action
+            android:id="@+id/action_nav_list_character_to_nav_favorite_character"
+            app:destination="@id/nav_favorite_character" />
     </fragment>
 
     <fragment
@@ -20,4 +23,10 @@
         android:name="com.demo.android.henrique.rickandmotyapp.view.DetailCharacterFragment"
         android:label="@string/fragment_detail"
         tools:layout="@layout/fragment_detail_character" />
+
+    <fragment
+        android:id="@+id/nav_favorite_character"
+        android:name="com.demo.android.henrique.rickandmotyapp.view.FavoritesCharacterFragment"
+        android:label="@string/fragment_favorites"
+        tools:layout="@layout/fragment_favorites_character" />
 </navigation>

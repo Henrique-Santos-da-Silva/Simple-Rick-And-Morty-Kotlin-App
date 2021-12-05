@@ -2,8 +2,11 @@
     <string name="app_name">RickAndMorty App</string>
     <string name="fragment_list_home">Home</string>
     <string name="fragment_detail">Detail Character</string>
+    <string name="fragment_favorites">Characters Favorites</string>
     <string name="gender"><b>Gender:</b> %1$s</string>
     <string name="specie"><b>Specie:</b> %1$s</string>
     <string name="origin"><b>Origin:</b> %1$s</string>
     <string name="location"><b>Location:</b> %1$s</string>
+    <string name="character_list_menu">Characters</string>
+    <string name="character_favorite_menu">Favorites</string>
 </resources>
