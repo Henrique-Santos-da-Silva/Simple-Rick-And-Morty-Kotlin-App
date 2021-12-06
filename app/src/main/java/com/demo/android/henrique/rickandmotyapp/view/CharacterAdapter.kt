@@ -1,50 +1,27 @@
 package com.demo.android.henrique.rickandmotyapp.view
 
-import android.annotation.SuppressLint
-import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import androidx.navigation.findNavController
-import androidx.navigation.fragment.NavHostFragment
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.demo.android.henrique.rickandmotyapp.R
 import com.demo.android.henrique.rickandmotyapp.databinding.ItemCharacterBinding
 import com.demo.android.henrique.rickandmotyapp.model.Character
-import com.demo.android.henrique.rickandmotyapp.utils.OnItemClickListener
-import com.demo.android.henrique.rickandmotyapp.view.DetailCharacterFragment.Companion.CHARACTER_DETAIL_ID
 import com.squareup.picasso.Picasso
 
-class CharacterAdapter: RecyclerView.Adapter<CharacterAdapter.CharacterViewHolder>() {
+class CharacterAdapter: ListAdapter<Character, CharacterAdapter.CharacterViewHolder>(DiffCallBack()) {
 
-    private var listCharacters: List<Character> = emptyList()
-
-    // TODO: 06/12/2021 Remover essa gambiarra
-    var navigationId: Int? = null
+    private var onItemClickListener: ((Character) -> Unit)? = null
 
     inner class CharacterViewHolder(private val binding: ItemCharacterBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(character: Character) {
-//            binding.root.id = character.id
             binding.txtName.text = character.name
             Picasso.get().load(character.image).into(binding.imgCharacter)
 
-
-
-
-            binding.root.setOnClickListener { view ->
-
-                Log.d("TAG", "ZZZZZZZZZZZZZZZZZZZZZZZZZZ -> ${view.id}")
-                Log.d("TAG", "AAAAAAAAAAAAAAAAAAA-> ${R.id.action_nav_list_character_to_nav_detail_character}")
-                Log.d("TAG", "BBBBBBBBBBBBBBBBBBB-> ${R.id.action_nav_favorite_character_to_nav_detail_character}")
-//
-                val bundle = Bundle().apply {
-                   putSerializable(CHARACTER_DETAIL_ID, character)
+            binding.root.apply {
+                setOnClickListener {
+                    onItemClickListener?.let { it(character) }
                 }
-
-
-                navigationId?.let { view.findNavController().navigate(it, bundle) }
-
             }
         }
     }
@@ -56,18 +33,21 @@ class CharacterAdapter: RecyclerView.Adapter<CharacterAdapter.CharacterViewHolde
     }
 
     override fun onBindViewHolder(holder: CharacterViewHolder, position: Int) {
-        holder.bind(listCharacters[position])
+        holder.bind(getItem(position))
     }
 
-    override fun getItemCount(): Int = listCharacters.size
-
-    @SuppressLint("NotifyDataSetChanged")
-    fun setCharacters(characters: List<Character>){
-        listCharacters = characters
-        notifyDataSetChanged()
+    fun setOnItemClickListener(listener: (Character) -> Unit) {
+        onItemClickListener = listener
     }
 
-    fun onClick(view: View, resId: Int, bundle: Bundle) {
-        view.findNavController().navigate(resId, bundle)
+}
+
+class DiffCallBack: DiffUtil.ItemCallback<Character>() {
+    override fun areItemsTheSame(oldItem: Character, newItem: Character): Boolean {
+        return oldItem.characterId == newItem.characterId
+    }
+
+    override fun areContentsTheSame(oldItem: Character, newItem: Character): Boolean {
+        return oldItem == newItem
     }
 }

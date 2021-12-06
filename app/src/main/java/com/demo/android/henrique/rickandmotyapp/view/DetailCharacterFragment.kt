@@ -35,7 +35,7 @@ class DetailCharacterFragment : Fragment() {
 
 //        val id: Int = arguments?.getInt(CHARACTER_DETAIL_ID) ?: 0
 
-        val characterSerializable = arguments?.getSerializable(CHARACTER_DETAIL_ID) as Character
+        val characterSerializable: Character = arguments?.getSerializable(CHARACTER_DETAIL_ID) as Character
 
         sharedViewModel.findBy(characterSerializable.characterId).observe(viewLifecycleOwner, Observer { response ->
             if (response != null) {
