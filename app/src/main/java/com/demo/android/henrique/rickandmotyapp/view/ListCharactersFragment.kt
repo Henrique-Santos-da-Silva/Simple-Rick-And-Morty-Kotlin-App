@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.demo.android.henrique.rickandmotyapp.R
 import com.demo.android.henrique.rickandmotyapp.databinding.FragmentListCharactersBinding
 import com.demo.android.henrique.rickandmotyapp.model.Character
 import com.demo.android.henrique.rickandmotyapp.repositories.CharacterRepository
@@ -21,6 +22,8 @@ import com.demo.android.henrique.rickandmotyapp.viewmodel.SharedViewModelFactory
 class ListCharactersFragment : Fragment() {
     private var _binding: FragmentListCharactersBinding? = null
     private val binding: FragmentListCharactersBinding? get() = _binding
+
+    var adapter = CharacterAdapter()
 
     private val sharedViewModel: SharedViewModel by activityViewModels { SharedViewModelFactory(CharacterRepository()) }
 
@@ -37,6 +40,9 @@ class ListCharactersFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
+
+
         sharedViewModel.listCharacter.observe(viewLifecycleOwner, Observer { response ->
             if (response.isSuccessful) {
                 showCharacters(response.body()!!.results)
@@ -49,11 +55,15 @@ class ListCharactersFragment : Fragment() {
             }
         })
 
+        binding?.rvMain?.adapter = adapter
+        binding?.rvMain?.layoutManager = LinearLayoutManager(requireContext())
+        // TODO: 06/12/2021 Remover essa gambiarra
+        adapter.navigationId = R.id.action_nav_list_character_to_nav_detail_character
+
     }
 
     private fun showCharacters(response: List<Character>) {
-        binding?.rvMain?.adapter = CharacterAdapter(response)
-        binding?.rvMain?.layoutManager = LinearLayoutManager(requireContext())
+       adapter.setCharacters(response)
     }
 
     private fun showErrorMessage(message: String) {
@@ -66,4 +76,6 @@ class ListCharactersFragment : Fragment() {
 //        else
 //            binding?.progressBar?.visibility = View.GONE
 //    }
+
+
 }
