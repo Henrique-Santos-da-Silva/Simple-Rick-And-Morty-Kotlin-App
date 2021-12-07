@@ -1,12 +1,10 @@
 package com.demo.android.henrique.rickandmotyapp.view
 
-import android.app.Application
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -17,8 +15,8 @@ import com.demo.android.henrique.rickandmotyapp.databinding.FragmentFavoritesCha
 import com.demo.android.henrique.rickandmotyapp.model.Character
 import com.demo.android.henrique.rickandmotyapp.view.DetailCharacterFragment.Companion.CHARACTER_DETAIL_ID
 import com.demo.android.henrique.rickandmotyapp.viewmodel.SharedViewModel
-import com.demo.android.henrique.rickandmotyapp.viewmodel.SharedViewModelFactory
 import com.google.android.material.snackbar.Snackbar
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class FavoritesCharacterFragment: Fragment() {
     private var _binding: FragmentFavoritesCharacterBinding? = null
@@ -26,7 +24,8 @@ class FavoritesCharacterFragment: Fragment() {
 
     private val adapter: CharacterAdapter by lazy { CharacterAdapter() }
 
-    private val sharedViewModel: SharedViewModel by activityViewModels { SharedViewModelFactory(activity?.application as Application) }
+    // private val sharedViewModel: SharedViewModel by activityViewModels { SharedViewModelFactory(activity?.application as Application) }
+    private val sharedViewModel: SharedViewModel by viewModel()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = FragmentFavoritesCharacterBinding.inflate(inflater, container, false)

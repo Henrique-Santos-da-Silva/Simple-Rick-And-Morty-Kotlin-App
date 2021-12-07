@@ -1,26 +1,25 @@
 package com.demo.android.henrique.rickandmotyapp.view
 
-import android.app.Application
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import com.demo.android.henrique.rickandmotyapp.R
 import com.demo.android.henrique.rickandmotyapp.databinding.FragmentDetailCharacterBinding
 import com.demo.android.henrique.rickandmotyapp.model.Character
 import com.demo.android.henrique.rickandmotyapp.viewmodel.SharedViewModel
-import com.demo.android.henrique.rickandmotyapp.viewmodel.SharedViewModelFactory
 import com.squareup.picasso.Picasso
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class DetailCharacterFragment : Fragment() {
     private var _binding: FragmentDetailCharacterBinding? = null
     private val binding: FragmentDetailCharacterBinding? get() = _binding
 
-    private val sharedViewModel: SharedViewModel by activityViewModels { SharedViewModelFactory(activity?.application as Application) }
+    // private val sharedViewModel: SharedViewModel by activityViewModels { SharedViewModelFactory(activity?.application as Application) }
+    private val sharedViewModel: SharedViewModel by viewModel()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = FragmentDetailCharacterBinding.inflate(inflater, container, false)

@@ -7,10 +7,7 @@ import android.net.ConnectivityManager.*
 import android.net.NetworkCapabilities.*
 import android.os.Build
 import android.util.Log
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.demo.android.henrique.rickandmotyapp.CharacterApplication
 import com.demo.android.henrique.rickandmotyapp.datasource.db.CharacterDao
 import com.demo.android.henrique.rickandmotyapp.datasource.db.CharacterDatabase
@@ -21,19 +18,18 @@ import kotlinx.coroutines.launch
 import retrofit2.Response
 import java.io.IOException
 
-class SharedViewModel(app: Application): AndroidViewModel(app) {
+class SharedViewModel(val repository: CharacterRepository, val context: Context): ViewModel() {
 
-    private val repository: CharacterRepository
-    private var readAll: LiveData<List<Character>>
+//    private val repository: CharacterRepository
+    private var readAll: LiveData<List<Character>> = repository.getAllFavoritesCharacters()
 
     val listCharacter = MutableLiveData<Response<CharacterList>>()
     private val detailCharacter = MutableLiveData<Character>()
 
-    init {
-        val characterDb: CharacterDao = CharacterDatabase(app).characterDao()
-        repository = CharacterRepository(characterDb)
-        readAll = repository.getAllFavoritesCharacters()
-    }
+//    init {
+////        val characterDb: CharacterDao = CharacterDatabase(app).characterDao()
+////        repository = CharacterRepository(characterDb)
+//    }
 
 
     fun findAllCharacters() {
@@ -100,7 +96,7 @@ class SharedViewModel(app: Application): AndroidViewModel(app) {
     }
 
     private fun hasInternetConnection(): Boolean {
-        val connectivityManager = getApplication<CharacterApplication>().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             val activeNetwork = connectivityManager.activeNetwork ?: return false
             val capabilities = connectivityManager.getNetworkCapabilities(activeNetwork) ?: return false
