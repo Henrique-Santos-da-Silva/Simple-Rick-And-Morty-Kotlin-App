@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -15,7 +16,8 @@ import com.demo.android.henrique.rickandmotyapp.R
 import com.demo.android.henrique.rickandmotyapp.databinding.FragmentFavoritesCharacterBinding
 import com.demo.android.henrique.rickandmotyapp.model.Character
 import com.demo.android.henrique.rickandmotyapp.view.DetailCharacterFragment.Companion.CHARACTER_DETAIL_ID
-import com.demo.android.henrique.rickandmotyapp.viewmodel.CharacterFavoriteViewModel
+import com.demo.android.henrique.rickandmotyapp.viewmodel.SharedViewModel
+import com.demo.android.henrique.rickandmotyapp.viewmodel.SharedViewModelFactory
 import com.google.android.material.snackbar.Snackbar
 
 class FavoritesCharacterFragment: Fragment() {
@@ -24,7 +26,7 @@ class FavoritesCharacterFragment: Fragment() {
 
     private val adapter: CharacterAdapter by lazy { CharacterAdapter() }
 
-    private val databaseViewModel: CharacterFavoriteViewModel  by lazy { CharacterFavoriteViewModel(activity?.application as Application) }
+    private val sharedViewModel: SharedViewModel by activityViewModels { SharedViewModelFactory(activity?.application as Application) }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = FragmentFavoritesCharacterBinding.inflate(inflater, container, false)
@@ -34,7 +36,7 @@ class FavoritesCharacterFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        databaseViewModel.getAllFavorites().observe(viewLifecycleOwner, Observer { characters ->
+        sharedViewModel.getAllFavorites().observe(viewLifecycleOwner, Observer { characters ->
             showCharacters(characters)
         })
 
@@ -57,11 +59,11 @@ class FavoritesCharacterFragment: Fragment() {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val position: Int = viewHolder.adapterPosition
                 val character: Character = adapter.currentList[position]
-                databaseViewModel.deleteFavorite(character)
+                sharedViewModel.deleteFavorite(character)
 
                 Snackbar.make(view, "Successfully deleted Favorite Character", Snackbar.LENGTH_LONG).apply {
                     setAction("Undo") {
-                        databaseViewModel.addFavorite(character)
+                        sharedViewModel.addFavorite(character)
                     }
                     show()
                 }

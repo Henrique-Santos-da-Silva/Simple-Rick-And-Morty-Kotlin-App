@@ -12,8 +12,6 @@ import androidx.lifecycle.Observer
 import com.demo.android.henrique.rickandmotyapp.R
 import com.demo.android.henrique.rickandmotyapp.databinding.FragmentDetailCharacterBinding
 import com.demo.android.henrique.rickandmotyapp.model.Character
-import com.demo.android.henrique.rickandmotyapp.repositories.CharacterRepository
-import com.demo.android.henrique.rickandmotyapp.viewmodel.CharacterFavoriteViewModel
 import com.demo.android.henrique.rickandmotyapp.viewmodel.SharedViewModel
 import com.demo.android.henrique.rickandmotyapp.viewmodel.SharedViewModelFactory
 import com.squareup.picasso.Picasso
@@ -22,8 +20,7 @@ class DetailCharacterFragment : Fragment() {
     private var _binding: FragmentDetailCharacterBinding? = null
     private val binding: FragmentDetailCharacterBinding? get() = _binding
 
-    private val sharedViewModel: SharedViewModel by activityViewModels { SharedViewModelFactory(CharacterRepository()) }
-    private val databaseViewModel: CharacterFavoriteViewModel by lazy { CharacterFavoriteViewModel(activity?.application as Application) }
+    private val sharedViewModel: SharedViewModel by activityViewModels { SharedViewModelFactory(activity?.application as Application) }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         _binding = FragmentDetailCharacterBinding.inflate(inflater, container, false)
@@ -37,19 +34,17 @@ class DetailCharacterFragment : Fragment() {
 
         val characterSerializable: Character = arguments?.getSerializable(CHARACTER_DETAIL_ID) as Character
 
-        sharedViewModel.findBy(characterSerializable.characterId).observe(viewLifecycleOwner, Observer { response ->
+        sharedViewModel.findBy(characterSerializable).observe(viewLifecycleOwner, Observer { response ->
             if (response != null) {
                 showCharacter(response)
-            } else {
-                showMessage("Ops! Ocorreu um erro")
-                activity?.supportFragmentManager
-                    ?.beginTransaction()
-                    ?.remove(this)
-                    ?.commit()
             }
         })
 
-
+        sharedViewModel.localFindById(characterSerializable).observe(viewLifecycleOwner, Observer { character ->
+            if (character != null) {
+                showCharacter(character)
+            }
+        })
     }
 
     private fun showCharacter(response: Character) {
@@ -68,7 +63,7 @@ class DetailCharacterFragment : Fragment() {
     }
 
     private fun addFavoriteCharacterInDatabase(response: Character) {
-        databaseViewModel.addFavorite(response)
+        sharedViewModel.addFavorite(response)
         showMessage("Personagem salvo como preferido")
     }
 

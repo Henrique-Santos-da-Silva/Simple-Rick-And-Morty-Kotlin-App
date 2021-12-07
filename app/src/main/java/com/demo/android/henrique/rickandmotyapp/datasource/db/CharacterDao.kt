@@ -13,6 +13,9 @@ interface CharacterDao {
     @Query("SELECT * FROM characters")
     fun getAllFavoritesCharacters(): LiveData<List<Character>>
 
+    @Query("SELECT * FROM characters WHERE dbId = :id")
+    fun getFavoriteCharacterDetails(id: Int): LiveData<Character>
+
     @Delete
     suspend fun deleteFavoriteCharacter(character: Character)
 }
