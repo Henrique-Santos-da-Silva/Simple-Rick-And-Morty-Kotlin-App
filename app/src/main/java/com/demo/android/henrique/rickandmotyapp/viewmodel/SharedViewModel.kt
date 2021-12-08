@@ -1,16 +1,17 @@
 package com.demo.android.henrique.rickandmotyapp.viewmodel
 
-import android.app.Application
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.ConnectivityManager.*
+import android.net.Network
+import android.net.NetworkCapabilities
 import android.net.NetworkCapabilities.*
 import android.os.Build
 import android.util.Log
-import androidx.lifecycle.*
-import com.demo.android.henrique.rickandmotyapp.CharacterApplication
-import com.demo.android.henrique.rickandmotyapp.datasource.db.CharacterDao
-import com.demo.android.henrique.rickandmotyapp.datasource.db.CharacterDatabase
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.demo.android.henrique.rickandmotyapp.model.Character
 import com.demo.android.henrique.rickandmotyapp.model.CharacterList
 import com.demo.android.henrique.rickandmotyapp.repositories.CharacterRepository
@@ -90,7 +91,7 @@ class SharedViewModel(val repository: CharacterRepository, val context: Context)
         } catch (t: Throwable) {
             when (t) {
                 is IOException -> Log.e("TAG", "Network Failure")
-                else -> throw Exception("Erro desconhecido")
+                else -> throw Exception("Unknown error")
             }
         }
     }
@@ -98,8 +99,8 @@ class SharedViewModel(val repository: CharacterRepository, val context: Context)
     private fun hasInternetConnection(): Boolean {
         val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            val activeNetwork = connectivityManager.activeNetwork ?: return false
-            val capabilities = connectivityManager.getNetworkCapabilities(activeNetwork) ?: return false
+            val activeNetwork: Network = connectivityManager.activeNetwork ?: return false
+            val capabilities: NetworkCapabilities = connectivityManager.getNetworkCapabilities(activeNetwork) ?: return false
             return when {
                 capabilities.hasTransport(TRANSPORT_WIFI) -> true
                 capabilities.hasTransport(TRANSPORT_CELLULAR) -> true

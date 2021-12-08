@@ -63,7 +63,7 @@ class DetailCharacterFragment : Fragment() {
 
     private fun addFavoriteCharacterInDatabase(response: Character) {
         sharedViewModel.addFavorite(response)
-        showMessage("Personagem salvo como preferido")
+        showMessage("Character saved with favorite")
     }
 
     private fun showMessage(message: String) {

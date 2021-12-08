@@ -11,6 +11,4 @@ val viewModelModule = module {
     single { CharacterRepository(CharacterDatabase(context = androidContext()).characterDao()) }
 
     viewModel { SharedViewModel(repository = get(), context = androidContext()) }
-
-
 }
